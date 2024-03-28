@@ -19,30 +19,27 @@ namespace NproProjectManagement.Services
             try
             {
                List<Commanddto> result = await _unitOfWork.Comment
-            .OrderByDescending(Comment => Comment.Deadline)
+            .OrderByDescending(Comment => Comment.Timestamp)
             .Select(Comment => new Commanddto
             {
                 CommentID = Comment.CommentID,
                 Content = Comment.Content,
-                Deadline = Comment.Deadline,
                 Timestamp = Comment.Timestamp,
-                Status = Comment.Status,
-                UserID = Comment.UserID                
-
+                UserID = Comment.UserID,
+                TaskID=Comment.TaskID
             })
             .ToListAsync();
 
-                int totalCount = result.Count;
-                result.ForEach(dto => dto.CommentCount = totalCount);
-
+                
                 return result;
 
 
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex.ToString());
             }
+            return null;
         }
 
         public async Task<List<Commanddto>> GetCommentDetailById(int id)
@@ -56,16 +53,12 @@ namespace NproProjectManagement.Services
                     {
                         CommentID = Comment.CommentID,
                         Content = Comment.Content,
-                        Deadline = Comment.Deadline,
                         Timestamp = Comment.Timestamp,
-                        Status = Comment.Status,
                         UserID = Comment.UserID
                     })
                     .ToListAsync();
 
-                int totalCount = result.Count;
-                result.ForEach(dto => dto.CommentCount = totalCount);
-
+                
                 return result;
             }
             catch (Exception ex)
@@ -74,7 +67,7 @@ namespace NproProjectManagement.Services
             }
         }
 
-        public async Task<Commanddto> SaveCommentDetail(Commanddto commanddto)
+        public async Task<Commanddto?> SaveCommentDetail(Commanddto commanddto)
         {
             try
             {
@@ -82,7 +75,7 @@ namespace NproProjectManagement.Services
                 if (commanddto == null)
                 {
                     // Set default error response
-                    return new Commanddto { Status = "Comment data is null." };
+                    return null;
                 }
 
                 // Check if CommentID is zero (indicating a new task)
@@ -94,8 +87,6 @@ namespace NproProjectManagement.Services
                         Content = commanddto.Content,
                         UserID = commanddto.UserID,
                         TaskID = commanddto.TaskID,
-                        Status = commanddto.Status,
-                        Deadline = commanddto.Deadline,
                         Timestamp = commanddto.Timestamp
                     };
 
@@ -108,9 +99,7 @@ namespace NproProjectManagement.Services
                     {
                         TaskID = newTask.TaskID,
                         Content = newTask.Content,
-                        Deadline = newTask.Deadline,
                         UserID = newTask.UserID,
-                        Status = newTask.Status,
                        Timestamp = newTask.Timestamp
                     };
 
@@ -123,15 +112,13 @@ namespace NproProjectManagement.Services
                     if (existingTask == null)
                     {
                         // Set default error response if task is not found
-                        return new Commanddto { Status = $"Task with ID {commanddto.CommentID} not found." };
+                        return null;
                     }
 
                     // Update task properties
                     existingTask.TaskID = commanddto.TaskID;
                     existingTask.Content = commanddto.Content;
-                    existingTask.Deadline = commanddto.Deadline;
                     existingTask.UserID = commanddto.UserID;
-                    existingTask.Status = commanddto.Status;
                     existingTask.Timestamp = commanddto.Timestamp;
                     // Update task in the database
                     _unitOfWork.Comment.Update(existingTask);
@@ -142,9 +129,7 @@ namespace NproProjectManagement.Services
                     {
                         TaskID = existingTask.TaskID,
                         Content = existingTask.Content,
-                        Deadline = existingTask.Deadline,
                         UserID = existingTask.UserID,
-                        Status = existingTask.Status,
                         Timestamp = existingTask.Timestamp
                     };
                 }
@@ -152,7 +137,7 @@ namespace NproProjectManagement.Services
             catch (Exception ex)
             {
                 // Handle exceptions and set error response
-                return new Commanddto { Status = ex.Message };
+                return null;
             }
         }
 

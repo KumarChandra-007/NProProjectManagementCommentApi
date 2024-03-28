@@ -16,7 +16,7 @@ builder.Services.AddDbContext<DBConnection>(options =>
 options.UseSqlServer(
  configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ICommentManagementServices, CommentManagementServices>();
-
+builder.Services.AddSingleton<IConfiguration>(configuration);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

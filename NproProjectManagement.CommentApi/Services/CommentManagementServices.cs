@@ -24,7 +24,7 @@ namespace NproProjectManagement.Services
             {
                 CommentID = Comment.CommentID,
                 Content = Comment.Content,
-                Deadline = Comment.Deadline,
+              //  Deadline = Comment.Deadline,
                 Timestamp = Comment.Timestamp,
                 Status = Comment.Status,
                 UserID = Comment.UserID                
@@ -32,8 +32,8 @@ namespace NproProjectManagement.Services
             })
             .ToListAsync();
 
-                int totalCount = result.Count;
-                result.ForEach(dto => dto.CommentCount = totalCount);
+                //int totalCount = result.Count;
+                //result.ForEach(dto => dto.CommentCount = totalCount);
 
                 return result;
 
@@ -56,15 +56,15 @@ namespace NproProjectManagement.Services
                     {
                         CommentID = Comment.CommentID,
                         Content = Comment.Content,
-                        Deadline = Comment.Deadline,
+                      //  Deadline = Comment.Deadline,
                         Timestamp = Comment.Timestamp,
                         Status = Comment.Status,
                         UserID = Comment.UserID
                     })
                     .ToListAsync();
 
-                int totalCount = result.Count;
-                result.ForEach(dto => dto.CommentCount = totalCount);
+                //int totalCount = result.Count;
+                //result.ForEach(dto => dto.CommentCount = totalCount);
 
                 return result;
             }
@@ -74,7 +74,7 @@ namespace NproProjectManagement.Services
             }
         }
 
-        public async Task<Commanddto> SaveCommentDetail(Commanddto commanddto)
+        public async Task<Commanddto?> SaveCommentDetail(Commanddto commanddto)
         {
             try
             {
@@ -95,7 +95,6 @@ namespace NproProjectManagement.Services
                         UserID = commanddto.UserID,
                         TaskID = commanddto.TaskID,
                         Status = commanddto.Status,
-                        Deadline = commanddto.Deadline,
                         Timestamp = commanddto.Timestamp
                     };
 
@@ -108,7 +107,6 @@ namespace NproProjectManagement.Services
                     {
                         TaskID = newTask.TaskID,
                         Content = newTask.Content,
-                        Deadline = newTask.Deadline,
                         UserID = newTask.UserID,
                         Status = newTask.Status,
                        Timestamp = newTask.Timestamp
@@ -123,13 +121,12 @@ namespace NproProjectManagement.Services
                     if (existingTask == null)
                     {
                         // Set default error response if task is not found
-                        return new Commanddto { Status = $"Task with ID {commanddto.CommentID} not found." };
+                        return null;
                     }
 
                     // Update task properties
                     existingTask.TaskID = commanddto.TaskID;
                     existingTask.Content = commanddto.Content;
-                    existingTask.Deadline = commanddto.Deadline;
                     existingTask.UserID = commanddto.UserID;
                     existingTask.Status = commanddto.Status;
                     existingTask.Timestamp = commanddto.Timestamp;
@@ -142,7 +139,6 @@ namespace NproProjectManagement.Services
                     {
                         TaskID = existingTask.TaskID,
                         Content = existingTask.Content,
-                        Deadline = existingTask.Deadline,
                         UserID = existingTask.UserID,
                         Status = existingTask.Status,
                         Timestamp = existingTask.Timestamp

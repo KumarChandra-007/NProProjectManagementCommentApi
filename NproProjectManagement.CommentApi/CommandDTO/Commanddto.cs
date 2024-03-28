@@ -7,9 +7,9 @@
         public string Content { get; set; }
         public DateTime Timestamp { get; set; }
         public string Status { get; set; }
-        public string Deadline { get; set; }
+       // public string Deadline { get; set; }
 
         public int UserID { get; set; }
-        public int CommentCount { get; set; }
+      //  public int CommentCount { get; set; }
     }
 }

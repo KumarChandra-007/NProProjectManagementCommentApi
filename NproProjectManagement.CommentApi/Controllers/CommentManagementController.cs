@@ -8,7 +8,7 @@ using NproProjectManagement.CommandDTO;
 
 namespace NproProjectManagement.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("commentapi")]
     [ApiController]
 
     public class CommentManagementController : ControllerBase

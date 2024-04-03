@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using NproProjectManagement.Model;
 using NproProjectManagement.CommandDTO;
-using Microsoft.IdentityModel.Tokens;
 using NproProjectManagement.CommentApi.DBContext;
 
 namespace NproProjectManagement.Services
@@ -18,59 +17,77 @@ namespace NproProjectManagement.Services
         {
             try
             {
-               List<Commanddto> result = await _unitOfWork.Comment
-            .OrderByDescending(Comment => Comment.Deadline)
-            .Select(Comment => new Commanddto
-            {
-                CommentID = Comment.CommentID,
-                Content = Comment.Content,
-              //  Deadline = Comment.Deadline,
-                Timestamp = Comment.Timestamp,
-                Status = Comment.Status,
-                UserID = Comment.UserID                
+                List<Commanddto> result = await _unitOfWork.Comment
+             .OrderByDescending(Comment => Comment.Deadline)
+             .Select(Comment => new Commanddto
+             {
+                 CommentID = Comment.CommentID,
+                 Content = Comment.Content,
+                 //  Deadline = Comment.Deadline,
+                 Timestamp = Comment.Timestamp,
+                 Status = Comment.Status,
+                 UserID = Comment.UserID
 
-            })
-            .ToListAsync();
-
-                //int totalCount = result.Count;
-                //result.ForEach(dto => dto.CommentCount = totalCount);
+             })
+             .ToListAsync();
 
                 return result;
-
-
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
-        public async Task<List<Commanddto>> GetCommentDetailById(int id)
+        public async Task<List<Commanddto>> GetCommentDetailById(int commentId)
         {
             try
             {
                 List<Commanddto> result = await _unitOfWork.Comment
-                    .Where(Comment => Comment.CommentID == id)
+                    .Where(Comment => Comment.CommentID == commentId)
                     .OrderByDescending(Comment => Comment.CommentID)
                     .Select(Comment => new Commanddto
                     {
                         CommentID = Comment.CommentID,
                         Content = Comment.Content,
-                      //  Deadline = Comment.Deadline,
+                        Deadline = Comment.Deadline,
                         Timestamp = Comment.Timestamp,
                         Status = Comment.Status,
                         UserID = Comment.UserID
                     })
                     .ToListAsync();
 
-                //int totalCount = result.Count;
-                //result.ForEach(dto => dto.CommentCount = totalCount);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<Commanddto>> GetCommentDetailByTaskId(int taskId)
+        {
+            try
+            {
+                List<Commanddto> result = await _unitOfWork.Comment
+                    .Where(Comment => Comment.TaskID == taskId)
+                    .OrderByDescending(Comment => Comment.CommentID)
+                    .Select(Comment => new Commanddto
+                    {
+                        CommentID = Comment.CommentID,
+                        Content = Comment.Content,
+                        //  Deadline = Comment.Deadline,
+                        Timestamp = Comment.Timestamp,
+                        Status = Comment.Status,
+                        UserID = Comment.UserID
+                    })
+                    .ToListAsync();
 
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -109,7 +126,7 @@ namespace NproProjectManagement.Services
                         Content = newTask.Content,
                         UserID = newTask.UserID,
                         Status = newTask.Status,
-                       Timestamp = newTask.Timestamp
+                        Timestamp = newTask.Timestamp
                     };
 
 
@@ -145,10 +162,9 @@ namespace NproProjectManagement.Services
                     };
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                // Handle exceptions and set error response
-                return new Commanddto { Status = ex.Message };
+                throw;
             }
         }
 
@@ -170,13 +186,10 @@ namespace NproProjectManagement.Services
                 // Save changes to the database
                 await _unitOfWork.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
-
-
-
     }
 }

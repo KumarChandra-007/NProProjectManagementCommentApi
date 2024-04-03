@@ -18,6 +18,7 @@ namespace NproProjectManagement.Controllers
         {
             _commentManagementServices = commentManagementServices;
         }
+
         [HttpGet("GetCommentDetails")]
         public async Task<ActionResult<List<Commanddto>>> GetCommentDetails()
         {
@@ -33,17 +34,16 @@ namespace NproProjectManagement.Controllers
                 // Return an error response if an exception occurs during processing
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-
         }
+
         // GET: api/TaskManagement/GetTaskDetailById?id={id}
-        [HttpGet("GetCommentDetailById")]
-        public async Task<ActionResult<List<Commanddto>>> GetCommentDetailById(int id)
+        [HttpGet("GetCommentDetailById/{commentId}")]
+        public async Task<ActionResult<List<Commanddto>>> GetCommentDetailById(int commentId)
         {
             try
             {
                 // Retrieve the task details by ID from the service
-                var CommentkDetails = await _commentManagementServices.GetCommentDetailById(id);
+                var CommentkDetails = await _commentManagementServices.GetCommentDetailById(commentId);
                 // Return the task details as a success response
                 return Ok(CommentkDetails);
             }
@@ -53,6 +53,25 @@ namespace NproProjectManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        // GET: api/TaskManagement/GetCommentDetailByTaskId?id={id}
+        [HttpGet("GetCommentDetailByTaskId/{taskId}")]
+        public async Task<ActionResult<List<Commanddto>>> GetCommentDetailByTaskId(int taskId)
+        {
+            try
+            {
+                // Retrieve the task details by ID from the service
+                var CommentkDetails = await _commentManagementServices.GetCommentDetailById(taskId);
+                // Return the task details as a success response
+                return Ok(CommentkDetails);
+            }
+            catch (Exception ex)
+            {
+                // Return an error response if an exception occurs during processing
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPost("SaveCommentDetail")]
         public async Task<ActionResult> SaveCommentDetail(Commanddto commanddto)
         {
@@ -61,7 +80,7 @@ namespace NproProjectManagement.Controllers
                 // Save the task details using the provided DTO
                 await _commentManagementServices.SaveCommentDetail(commanddto);
                 // Return a success response
-                return Ok("Task saved successfully");
+                return Ok("Comment saved successfully");
             }
             catch (Exception ex)
             {
@@ -87,5 +106,4 @@ namespace NproProjectManagement.Controllers
             }
         }
     }
-
 }

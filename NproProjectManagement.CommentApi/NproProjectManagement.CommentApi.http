@@ -1,6 +1,6 @@
 @NproProjectManagement.CommentApi_HostAddress = http://localhost:5209
 
-GET {{NproProjectManagement.CommentApi_HostAddress}}/weatherforecast/
+GET {{NproProjectManagement.CommentApi_HostAddress}}/commentapi/
 Accept: application/json
 
 ###
